@@ -7,6 +7,11 @@ import {
 
   Flex,
   Button, 
+  Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableRow,
 
 } from "@aws-amplify/ui-react";
 
@@ -68,7 +73,7 @@ function App() {
 
   return (
     <main>
-      <h1>City of Hollywood</h1>
+      <h1>Washington Park Project Complaint Data</h1>
           <Flex direction="row">
             <input
               type="text"
@@ -99,9 +104,32 @@ function App() {
             <input type="number" value={longitude} onChange={handleLongitude} />
             <Button onClick={createTodo}>+ new</Button>
             </Flex>
-   
+            <Table caption="" highlightOnHover={false}>
+        <TableHead>
+          <TableRow>
+            <TableCell as="th">Name</TableCell>
+            <TableCell as="th">Description</TableCell>
+            <TableCell as="th">Date</TableCell>
+            <TableCell as="th">Report</TableCell>
+            <TableCell as="th">Latitude</TableCell>
+            <TableCell as="th">Longitude</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {todos.map((todo) => (
+            <TableRow onClick={() => deleteTodo(todo.id)} key={todo.id}>
+              <TableCell>{todo.person}</TableCell>
+              <TableCell>{todo.description}</TableCell>
+              <TableCell>{todo.date}</TableCell>
+              <TableCell>{todo.report}</TableCell>
+              <TableCell>{todo.location?.lat}</TableCell>
+              <TableCell>{todo.location?.long}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
       
-      <ul>
+{/*       <ul>
         {todos.map((todo) => (
           <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
             {todo.person}
@@ -113,7 +141,7 @@ function App() {
 
           </li>
         ))}
-      </ul>
+      </ul> */}
      
     </main>
   );
