@@ -1,5 +1,6 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import type { Schema } from "../amplify/data/resource";
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import { generateClient } from "aws-amplify/data";
 import "@aws-amplify/ui-react/styles.css";
 
@@ -20,7 +21,7 @@ const client = generateClient<Schema>();
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-
+  const { signOut } = useAuthenticator();
   const [person, setPerson] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -131,7 +132,7 @@ function App() {
           ))}
         </TableBody>
       </Table>
-      {/* <Button onClick={signOut} width={120}>Sign out</Button> */}
+       <Button onClick={signOut} width={120}>Sign out</Button> 
     </main>
   );
 }
