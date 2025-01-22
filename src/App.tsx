@@ -2,6 +2,12 @@ import { useEffect, useState, ChangeEvent } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 
+import {
+
+  Flex,
+
+} from "@aws-amplify/ui-react";
+
 
 const client = generateClient<Schema>();
 
@@ -61,7 +67,7 @@ function App() {
   return (
     <main>
       <h1>City of Hollywood</h1>
-  
+          <Flex direction="row">
             <input
               type="text"
               value={person}
@@ -89,6 +95,7 @@ function App() {
             />
             <input type="number" value={latitude} onChange={handleLatitude} />
             <input type="number" value={longitude} onChange={handleLongitude} />
+            </Flex>
    
       <button onClick={createTodo}>+ new</button>
       <ul>
