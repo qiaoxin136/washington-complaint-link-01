@@ -14,10 +14,9 @@ const schema = a.schema({
       description: a.string(),
       report: a.string(),
       date: a.date(), 
-      location: a.customType({
-        lat: a.float(),
-        long: a.float(),
-      }),
+      lat: a.float(),
+      long: a.float(),
+      
     })
     .authorization((allow) => [allow.publicApiKey()]),
 });

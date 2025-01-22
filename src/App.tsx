@@ -62,10 +62,10 @@ function App() {
       description: description,
       date: date,
       report: report,
-      location:{
-        lat: latitude,
-      long: longitude}
-   });
+      lat: latitude,
+      long: longitude
+    }
+   );
   }
 
     
@@ -126,8 +126,8 @@ function App() {
               <TableCell>{todo.description}</TableCell>
               <TableCell>{todo.date}</TableCell>
               <TableCell>{todo.report}</TableCell>
-              <TableCell>{todo.location?.lat}</TableCell>
-              <TableCell>{todo.location?.long}</TableCell>
+              <TableCell>{todo.lat}</TableCell>
+              <TableCell>{todo.long}</TableCell>
             </TableRow>
           ))}
         </TableBody>
