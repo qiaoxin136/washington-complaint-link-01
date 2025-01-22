@@ -73,6 +73,8 @@ function App() {
     client.models.Todo.delete({ id })
   }
 
+  
+
   return (
     <main>
       <h1>Washington Park Project Complaint Data</h1>
@@ -130,7 +132,7 @@ function App() {
           ))}
         </TableBody>
       </Table>
-      <button onClick={signOut}>Sign out</button>
+      <Button onClick={signOut} width={120}>Sign out</Button>
     </main>
   );
 }
