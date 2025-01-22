@@ -6,6 +6,7 @@ import "@aws-amplify/ui-react/styles.css";
 import {
 
   Flex,
+  Button, 
 
 } from "@aws-amplify/ui-react";
 
@@ -96,7 +97,7 @@ function App() {
             />
             <input type="number" value={latitude} onChange={handleLatitude} />
             <input type="number" value={longitude} onChange={handleLongitude} />
-            <button onClick={createTodo}>+ new</button>
+            <Button onClick={createTodo}>+ new</Button>
             </Flex>
    
       
