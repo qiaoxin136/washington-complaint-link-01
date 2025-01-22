@@ -1,6 +1,7 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import "@aws-amplify/ui-react/styles.css";
 
 import {
 
@@ -95,9 +96,10 @@ function App() {
             />
             <input type="number" value={latitude} onChange={handleLatitude} />
             <input type="number" value={longitude} onChange={handleLongitude} />
+            <button onClick={createTodo}>+ new</button>
             </Flex>
    
-      <button onClick={createTodo}>+ new</button>
+      
       <ul>
         {todos.map((todo) => (
           <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
