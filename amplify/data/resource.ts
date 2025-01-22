@@ -10,6 +10,14 @@ const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
+      person: a.string(),
+      description: a.string(),
+      report: a.string(),
+      date: a.date(), 
+      location: a.customType({
+        lat: a.float(),
+        long: a.float(),
+      }),
     })
     .authorization((allow) => [allow.publicApiKey()]),
 });
