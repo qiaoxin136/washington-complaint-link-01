@@ -1,4 +1,5 @@
 import { useEffect, useState, ChangeEvent } from "react";
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 import "@aws-amplify/ui-react/styles.css";
@@ -27,6 +28,7 @@ function App() {
   const [report, setReport] = useState("");
   const [latitude, setLatitude] = useState(39.5);
   const [longitude, setLongitude] = useState(-78.5);
+  const { signOut } = useAuthenticator();
 
   const handlePerson = (e: ChangeEvent<HTMLInputElement>) => {
     setPerson(e.target.value);
@@ -128,21 +130,7 @@ function App() {
           ))}
         </TableBody>
       </Table>
-      
-{/*       <ul>
-        {todos.map((todo) => (
-          <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
-            {todo.person}
-            {todo.description}
-            {todo.date}
-            {todo.report}
-            {todo.location?.lat}
-            {todo.location?.long}
-
-          </li>
-        ))}
-      </ul> */}
-     
+      <button onClick={signOut}>Sign out</button>
     </main>
   );
 }
