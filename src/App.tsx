@@ -1,17 +1,7 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
-import {
-  Card,
-  Flex,
-  Button,
-  Input,
-  Table,
-  TableBody,
-  TableHead,
-  TableCell,
-  TableRow,
-} from "@aws-amplify/ui-react";
+
 
 const client = generateClient<Schema>();
 
@@ -71,35 +61,35 @@ function App() {
   return (
     <main>
       <h1>City of Hollywood</h1>
-      <Flex direction="row" gap="small">
-            <Input
+  
+            <input
               type="text"
               value={person}
               placeholder="person"
               onChange={handlePerson}
             />
-            <Input
+            <input
               type="text"
               value={description}
               placeholder="description"
               onChange={handleDescription}
             />
 
-            <Input
+            <input
               type="text"
               value={report}
               placeholder="report"
               onChange={handleReport}
             />
-            <Input
+            <input
               type="date"
               value={date}
               placeholder="date"
               onChange={handleDate}
             />
-            <Input type="number" value={latitude} onChange={handleLatitude} />
-            <Input type="number" value={longitude} onChange={handleLongitude} />
-          </Flex>
+            <input type="number" value={latitude} onChange={handleLatitude} />
+            <input type="number" value={longitude} onChange={handleLongitude} />
+   
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
