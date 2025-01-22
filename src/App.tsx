@@ -95,6 +95,11 @@ function App() {
         {todos.map((todo) => (
           <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
             {todo.person}
+            {todo.description}
+            {todo.date}
+            {todo.report}
+            {todo.location?.lat}
+            {todo.location?.long}
 
           </li>
         ))}
