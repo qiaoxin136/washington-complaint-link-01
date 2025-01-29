@@ -13,7 +13,7 @@ import {
   TableHead,
   TableCell,
   TableRow,
-
+  ScrollView, 
 } from "@aws-amplify/ui-react";
 
 
@@ -78,7 +78,34 @@ function App() {
   return (
     <main>
       <h1>Washington Park Project Complaint Data</h1>
-          <Flex direction="row">
+         
+            <ScrollView>
+            <Table caption="" highlightOnHover={false}>
+        <TableHead>
+          <TableRow>
+            <TableCell as="th">Name</TableCell>
+            <TableCell as="th">Description</TableCell>
+            <TableCell as="th">Date</TableCell>
+            <TableCell as="th">Report</TableCell>
+            <TableCell as="th">Latitude</TableCell>
+            <TableCell as="th">Longitude</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {todos.map((todo) => (
+            <TableRow onClick={() => deleteTodo(todo.id)} key={todo.id}>
+              <TableCell>{todo.person}</TableCell>
+              <TableCell>{todo.description}</TableCell>
+              <TableCell>{todo.date}</TableCell>
+              <TableCell>{todo.report}</TableCell>
+              <TableCell>{todo.lat}</TableCell>
+              <TableCell>{todo.long}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      </ScrollView>
+      <Flex direction="row">
             <input
               type="text"
               value={person}
@@ -106,33 +133,12 @@ function App() {
             />
             <input type="number" value={latitude} onChange={handleLatitude} />
             <input type="number" value={longitude} onChange={handleLongitude} />
-            <Button onClick={createTodo}>+ new</Button>
+            
             </Flex>
-            <Table caption="" highlightOnHover={false}>
-        <TableHead>
-          <TableRow>
-            <TableCell as="th">Name</TableCell>
-            <TableCell as="th">Description</TableCell>
-            <TableCell as="th">Date</TableCell>
-            <TableCell as="th">Report</TableCell>
-            <TableCell as="th">Latitude</TableCell>
-            <TableCell as="th">Longitude</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {todos.map((todo) => (
-            <TableRow onClick={() => deleteTodo(todo.id)} key={todo.id}>
-              <TableCell>{todo.person}</TableCell>
-              <TableCell>{todo.description}</TableCell>
-              <TableCell>{todo.date}</TableCell>
-              <TableCell>{todo.report}</TableCell>
-              <TableCell>{todo.lat}</TableCell>
-              <TableCell>{todo.long}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <Flex>
        <Button onClick={signOut} width={120}>Sign out</Button> 
+       <Button onClick={createTodo}>+ new</Button>
+       </Flex>
     </main>
   );
 }
