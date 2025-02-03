@@ -100,6 +100,10 @@ function App() {
     client.models.Todo.delete({ id });
   }
 
+  const openInNewTab = (url: any) => {
+    window.open(url, "_blank", "noreferrer");
+  };
+
   return (
     <main>
       <h1>Washington Park Project Complaint Data</h1>
@@ -112,6 +116,12 @@ function App() {
           Sign out
         </Button>
         <Button onClick={createTodo} backgroundColor={"azure"}color={"red"}>+ new</Button>
+        <Button
+          role="link"
+          onClick={() => openInNewTab("https://showdata.d34q2tdncqr0gx.amplifyapp.com/")}
+        >
+          Map
+        </Button>
       </Flex>
       < br/>
       <Flex direction="row">
