@@ -45,7 +45,7 @@ const components = {
           padding={`${tokens.space.xl} 0 0 ${tokens.space.xl}`}
           level={3}
         >
-          Sign in to your account
+          Washington Park Project Complaint Tracking
         </Heading>
       );
     },
