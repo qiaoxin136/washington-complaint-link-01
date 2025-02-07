@@ -14,9 +14,14 @@ import {
   TableRow,
   View,
   ThemeProvider,
-  Theme, 
-  Divider
+  Theme,
+  Divider,
 } from "@aws-amplify/ui-react";
+
+import { uploadData } from "aws-amplify/storage";
+
+// Define the type for the file object
+type FileType = File | null;
 
 const client = generateClient<Schema>();
 
@@ -49,16 +54,32 @@ const theme: Theme = {
   },
 };
 
-
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const { signOut } = useAuthenticator();
   const [person, setPerson] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
-  const [report, setReport] = useState("");
+  //const [report, setReport] = useState("");
   const [latitude, setLatitude] = useState(39.5);
   const [longitude, setLongitude] = useState(-78.5);
+
+  const [file, setFile] = useState<FileType>();
+
+  const handleChange = (event: any) => {
+    setFile(event.target.files?.[0]);
+  };
+
+  const handleClick = () => {
+    if (!file) {
+      return;
+    }
+    uploadData({
+      path: `picture-submissions/${file.name}`,
+      data: file,
+    });
+    console.log(file);
+  };
 
   const handlePerson = (e: ChangeEvent<HTMLInputElement>) => {
     setPerson(e.target.value);
@@ -69,9 +90,9 @@ function App() {
   const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);
   };
-  const handleReport = (e: ChangeEvent<HTMLInputElement>) => {
-    setReport(e.target.value);
-  };
+  // const handleReport = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setReport(e.target.value);
+  // };
   const handleLatitude = (e: ChangeEvent<HTMLInputElement>) => {
     setLatitude(parseFloat(e.target.value));
   };
@@ -90,7 +111,7 @@ function App() {
       person: person,
       description: description,
       date: date,
-      report: report,
+      report: file?.name,
       lat: latitude,
       long: longitude,
     });
@@ -108,22 +129,25 @@ function App() {
     <main>
       <h1>Washington Park Project Complaint Data</h1>
 
-      
       <Divider orientation="horizontal" />
-      < br/>
+      <br />
       <Flex>
         <Button onClick={signOut} width={120}>
           Sign out
         </Button>
-        <Button onClick={createTodo} backgroundColor={"azure"}color={"red"}>+ new</Button>
+        <Button onClick={createTodo} backgroundColor={"azure"} color={"red"}>
+          + new
+        </Button>
         <Button
           role="link"
-          onClick={() => openInNewTab("https://showdata.d34q2tdncqr0gx.amplifyapp.com/")}
+          onClick={() =>
+            openInNewTab("https://showdata.d34q2tdncqr0gx.amplifyapp.com/")
+          }
         >
           Map
         </Button>
       </Flex>
-      < br/>
+      <br />
       <Flex direction="row">
         <input
           type="text"
@@ -140,13 +164,7 @@ function App() {
           width="150%"
         />
 
-        <input
-          type="text"
-          value={report}
-          placeholder="report"
-          onChange={handleReport}
-          width="150%"
-        />
+       
         <input
           type="date"
           value={date}
@@ -154,53 +172,61 @@ function App() {
           onChange={handleDate}
           width="150%"
         />
-        <input type="number" value={latitude} onChange={handleLatitude} width="150%"/>
-        <input type="number" value={longitude} onChange={handleLongitude} width="150%"/>
-      </Flex>     
+        <input
+          type="number"
+          value={latitude}
+          onChange={handleLatitude}
+          width="150%"
+        />
+        <input
+          type="number"
+          value={longitude}
+          onChange={handleLongitude}
+          width="150%"
+        />
+         <input type="file" onChange={handleChange} />
+         <Button onClick={handleClick}>Upload</Button>
+      </Flex>
       <View
-          as="div"
-          ariaLabel="View example"
-          backgroundColor="var(--amplify-colors-white)"
-          borderRadius="6px"
-          //border="1px solid var(--amplify-colors-black)"
-          // boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)"
-          color="var(--amplify-colors-blue-60)"
-          height="45rem"
-          // maxWidth="100%"
-          padding="1rem"
-          width="100%"
+        as="div"
+        ariaLabel="View example"
+        backgroundColor="var(--amplify-colors-white)"
+        borderRadius="6px"
+        //border="1px solid var(--amplify-colors-black)"
+        // boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)"
+        color="var(--amplify-colors-blue-60)"
+        height="45rem"
+        // maxWidth="100%"
+        padding="1rem"
+        width="100%"
       >
-    
         <ThemeProvider theme={theme} colorMode="light">
-
-    
-        <Table caption="" highlightOnHover={false}>
-          <TableHead>
-            <TableRow>
-              <TableCell as="th">Name</TableCell>
-              <TableCell as="th">Description</TableCell>
-              <TableCell as="th">Date</TableCell>
-              <TableCell as="th">Report</TableCell>
-              <TableCell as="th">Latitude</TableCell>
-              <TableCell as="th">Longitude</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {todos.map((todo) => (
-              <TableRow onClick={() => deleteTodo(todo.id)} key={todo.id}>
-                <TableCell>{todo.person}</TableCell>
-                <TableCell>{todo.description}</TableCell>
-                <TableCell>{todo.date}</TableCell>
-                <TableCell>{todo.report}</TableCell>
-                <TableCell>{todo.lat}</TableCell>
-                <TableCell>{todo.long}</TableCell>
+          <Table caption="" highlightOnHover={false}>
+            <TableHead>
+              <TableRow>
+                <TableCell as="th">Name</TableCell>
+                <TableCell as="th">Description</TableCell>
+                <TableCell as="th">Date</TableCell>
+                <TableCell as="th">Report</TableCell>
+                <TableCell as="th">Latitude</TableCell>
+                <TableCell as="th">Longitude</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {todos.map((todo) => (
+                <TableRow onClick={() => deleteTodo(todo.id)} key={todo.id}>
+                  <TableCell>{todo.person}</TableCell>
+                  <TableCell>{todo.description}</TableCell>
+                  <TableCell>{todo.date}</TableCell>
+                  <TableCell>{todo.report}</TableCell>
+                  <TableCell>{todo.lat}</TableCell>
+                  <TableCell>{todo.long}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </ThemeProvider>
       </View>
-     
     </main>
   );
 }
