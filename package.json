@@ -17,6 +17,7 @@
     "@deck.gl/layers": "^9.0.41",
     "@deck.gl/react": "^9.0.41",
     "aws-amplify": "^6.13.0",
+    "axios": "^1.7.9",
     "maplibre-gl": "^2.4.0",
     "maplibre-gl-js-amplify": "^4.0.2",
     "react": "^18.2.0",

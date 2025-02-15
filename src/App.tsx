@@ -3,6 +3,7 @@ import type { Schema } from "../amplify/data/resource";
 import { DeckGL } from "@deck.gl/react";
 import { PickingInfo } from "@deck.gl/core";
 import { MVTLayer } from "@deck.gl/geo-layers";
+import { GeoJsonLayer } from "@deck.gl/layers";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { MapView } from "@aws-amplify/ui-react-geo";
 import { generateClient } from "aws-amplify/data";
@@ -33,6 +34,19 @@ import "@aws-amplify/ui-react/styles.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { uploadData } from "aws-amplify/storage";
+
+import axios, { AxiosResponse } from "axios";
+import type {Feature, Geometry} from 'geojson';
+
+type BlockProperties = {
+  person: string;
+  description: string;
+  date: string;
+  report: string;
+};
+
+
+export type DataType=Feature<Geometry,BlockProperties>;
 
 // Define the type for the file object
 type FileType = File | null;
@@ -92,6 +106,8 @@ function App() {
   const [file, setFile] = useState<FileType>();
 
   const [viewport, setViewport] = useState(INITIAL_VIEW_STATE);
+
+  const [data, setData] = useState<DataType>();
   const layers: any = [];
 
   const handleChange = (event: any) => {
@@ -122,6 +138,36 @@ function App() {
   //   setReport(e.target.value);
   // };
 
+  const getPlacesData = async () => {
+    try {
+      const url =
+        "https://u7wrupm2a5.execute-api.us-east-1.amazonaws.com/test/getData";
+      const response: AxiosResponse = await axios.get(url);
+      //console.log(response.data);
+     
+        return response.data;
+       
+      
+      return null;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  function handleData() {
+    getPlacesData().then((array) => {
+      setData(array);
+      console.log(data);
+    });
+
+    //console.log(data);
+  }
+
+  useEffect(() => {
+    handleData();
+  }, []);
+
+
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -144,9 +190,9 @@ function App() {
     client.models.Todo.delete({ id });
   }
 
-  const openInNewTab = (url: any) => {
-    window.open(url, "_blank", "noreferrer");
-  };
+  // const openInNewTab = (url: any) => {
+  //   window.open(url, "_blank", "noreferrer");
+  // };
 
   const onClick = useCallback((info: PickingInfo) => {
     setLng(Object.values(info)[8][0]);
@@ -291,6 +337,40 @@ function App() {
 
   layers.push(layer75);
 
+  let layer25 = new GeoJsonLayer({
+    id: "datasource",
+    data: data,
+    filled: true,
+      //pointType: "circle+text",
+      pickable: true,
+      pointType: "icon",
+      iconAtlas:
+        "https://mylibraryforuse.s3.amazonaws.com/logo/icons8-marker-100.png",
+      iconMapping: {
+        marker: {
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+          anchorY: 50,
+          anchorX: 50,
+          mask: false,
+        },
+      },
+      getIcon: () => "marker",
+      getIconSize: 5,
+      getIconColor: [112, 128, 144, 200],
+      getIconAngle: 0,
+      iconSizeUnits: "meters",
+      iconSizeScale: 5,
+      iconSizeMinPixels: 6,
+
+
+  });
+
+  layers.push(layer25);
+
+
   return (
     <main>
       <h1>Washington Park Project Complaint Data</h1>
@@ -306,11 +386,12 @@ function App() {
         </Button>
         <Button
           role="link"
-          onClick={() =>
-            openInNewTab("https://showdata.d34q2tdncqr0gx.amplifyapp.com/")
-          }
+          // onClick={() =>
+          //   openInNewTab("https://showdata.d34q2tdncqr0gx.amplifyapp.com/")
+          // }
+          onClick={()=>getPlacesData()}
         >
-          Map
+          Refresh Data
         </Button>
       </Flex>
       <br />
