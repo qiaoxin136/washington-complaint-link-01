@@ -484,7 +484,7 @@ function App() {
             style={{
               //position: "absolute",
               zIndex: -1,
-              height: "200%",
+              height: "100%",
               width: "100%",
             }}
           >
