@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent, useCallback} from "react";
+import { useEffect, useState, ChangeEvent, useCallback } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { DeckGL } from "@deck.gl/react";
 import { PickingInfo } from "@deck.gl/core";
@@ -17,10 +17,10 @@ import {
   TableHead,
   TableCell,
   TableRow,
-  View,
   ThemeProvider,
   Theme,
   Divider,
+  ScrollView,
 } from "@aws-amplify/ui-react";
 
 import {
@@ -36,7 +36,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { uploadData } from "aws-amplify/storage";
 
 import axios, { AxiosResponse } from "axios";
-import type {Feature, Geometry} from 'geojson';
+import type { Feature, Geometry } from "geojson";
 
 type BlockProperties = {
   person: string;
@@ -45,8 +45,7 @@ type BlockProperties = {
   report: string;
 };
 
-
-export type DataType=Feature<Geometry,BlockProperties>;
+export type DataType = Feature<Geometry, BlockProperties>;
 
 // Define the type for the file object
 type FileType = File | null;
@@ -144,10 +143,9 @@ function App() {
         "https://u7wrupm2a5.execute-api.us-east-1.amazonaws.com/test/getData";
       const response: AxiosResponse = await axios.get(url);
       //console.log(response.data);
-     
-        return response.data;
-       
-      
+
+      return response.data;
+
       return null;
     } catch (error) {
       console.log(error);
@@ -166,8 +164,6 @@ function App() {
   useEffect(() => {
     handleData();
   }, []);
-
-
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -341,35 +337,32 @@ function App() {
     id: "datasource",
     data: data,
     filled: true,
-      //pointType: "circle+text",
-      pickable: true,
-      pointType: "icon",
-      iconAtlas:
-        "https://mylibraryforuse.s3.amazonaws.com/logo/icons8-marker-100.png",
-      iconMapping: {
-        marker: {
-          x: 0,
-          y: 0,
-          width: 100,
-          height: 100,
-          anchorY: 50,
-          anchorX: 50,
-          mask: false,
-        },
+    //pointType: "circle+text",
+    pickable: true,
+    pointType: "icon",
+    iconAtlas:
+      "https://mylibraryforuse.s3.amazonaws.com/logo/icons8-marker-100.png",
+    iconMapping: {
+      marker: {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        anchorY: 50,
+        anchorX: 50,
+        mask: false,
       },
-      getIcon: () => "marker",
-      getIconSize: 5,
-      getIconColor: [112, 128, 144, 200],
-      getIconAngle: 0,
-      iconSizeUnits: "meters",
-      iconSizeScale: 5,
-      iconSizeMinPixels: 6,
-
-
+    },
+    getIcon: () => "marker",
+    getIconSize: 5,
+    getIconColor: [112, 128, 144, 200],
+    getIconAngle: 0,
+    iconSizeUnits: "meters",
+    iconSizeScale: 5,
+    iconSizeMinPixels: 6,
   });
 
   layers.push(layer25);
-
 
   return (
     <main>
@@ -389,7 +382,7 @@ function App() {
           // onClick={() =>
           //   openInNewTab("https://showdata.d34q2tdncqr0gx.amplifyapp.com/")
           // }
-          onClick={()=>getPlacesData()}
+          onClick={() => getPlacesData()}
         >
           Refresh Data
         </Button>
@@ -418,22 +411,12 @@ function App() {
           onChange={handleDate}
           width="150%"
         />
-        <input
-          type="number"
-          value={lat}
-        
-          width="150%"
-        />
-        <input
-          type="number"
-          value={lng}
-         
-          width="150%"
-        />
+        <input type="number" value={lat} width="150%" />
+        <input type="number" value={lng} width="150%" />
         <input type="file" onChange={handleChange} />
         <Button onClick={handleClick}>Upload</Button>
       </Flex>
-      <View
+      <ScrollView
         as="div"
         ariaLabel="View example"
         backgroundColor="var(--amplify-colors-white)"
@@ -441,10 +424,14 @@ function App() {
         //border="1px solid var(--amplify-colors-black)"
         // boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)"
         color="var(--amplify-colors-blue-60)"
-        height="45rem"
+        // height="45rem"
         // maxWidth="100%"
         padding="1rem"
-        width="100%"
+        // width="100%"
+        width="2400px"
+        height={"2400px"}
+        maxHeight={"2400px"}
+        maxWidth="2400px"
       >
         <ThemeProvider theme={theme} colorMode="light">
           <Table caption="" highlightOnHover={false}>
@@ -472,8 +459,8 @@ function App() {
             </TableBody>
           </Table>
         </ThemeProvider>
-      </View>
-      <View>
+      </ScrollView>
+      <ScrollView>
         <DeckGL
           initialViewState={INITIAL_VIEW_STATE}
           controller
@@ -481,9 +468,9 @@ function App() {
           onClick={onClick}
           onViewStateChange={({ viewState }) => setViewport(viewState)}
           style={{
-            height: "50%",
+            height: "100%",
             width: "100%",
-            top: "50%",
+            top: "90%",
           }}
         >
           <MapView
@@ -492,17 +479,17 @@ function App() {
             style={{
               //position: "absolute",
               zIndex: -1,
-              height: "100%",
+              height: "200%",
               width: "100%",
             }}
           >
-              <Marker latitude={lat} longitude={lng} />
-                <NavigationControl />
-                <GeolocateControl />
-                <ScaleControl />
+            <Marker latitude={lat} longitude={lng} />
+            <NavigationControl />
+            <GeolocateControl />
+            <ScaleControl />
           </MapView>
         </DeckGL>
-      </View>
+      </ScrollView>
     </main>
   );
 }
