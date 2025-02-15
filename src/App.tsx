@@ -1,6 +1,10 @@
-import { useEffect, useState, ChangeEvent } from "react";
+import { useEffect, useState, ChangeEvent, useCallback} from "react";
 import type { Schema } from "../amplify/data/resource";
+import { DeckGL } from "@deck.gl/react";
+import { PickingInfo } from "@deck.gl/core";
+import { MVTLayer } from "@deck.gl/geo-layers";
 import { useAuthenticator } from "@aws-amplify/ui-react";
+import { MapView } from "@aws-amplify/ui-react-geo";
 import { generateClient } from "aws-amplify/data";
 import "@aws-amplify/ui-react/styles.css";
 
@@ -17,6 +21,16 @@ import {
   Theme,
   Divider,
 } from "@aws-amplify/ui-react";
+
+import {
+  Marker,
+  NavigationControl,
+  GeolocateControl,
+  ScaleControl,
+} from "react-map-gl";
+
+import "@aws-amplify/ui-react/styles.css";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 import { uploadData } from "aws-amplify/storage";
 
@@ -54,17 +68,31 @@ const theme: Theme = {
   },
 };
 
+const INITIAL_VIEW_STATE: any = {
+  //longitude: 139.7674681227469,
+  longitude: -80.20321,
+  //latitude: 35.68111419325676,
+  latitude: 26.00068,
+  zoom: 17,
+  bearing: 0,
+  pitch: 0,
+};
+
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+
   const { signOut } = useAuthenticator();
   const [person, setPerson] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   //const [report, setReport] = useState("");
-  const [latitude, setLatitude] = useState(39.5);
-  const [longitude, setLongitude] = useState(-78.5);
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
 
   const [file, setFile] = useState<FileType>();
+
+  const [viewport, setViewport] = useState(INITIAL_VIEW_STATE);
+  const layers: any = [];
 
   const handleChange = (event: any) => {
     setFile(event.target.files?.[0]);
@@ -93,12 +121,7 @@ function App() {
   // const handleReport = (e: ChangeEvent<HTMLInputElement>) => {
   //   setReport(e.target.value);
   // };
-  const handleLatitude = (e: ChangeEvent<HTMLInputElement>) => {
-    setLatitude(parseFloat(e.target.value));
-  };
-  const handleLongitude = (e: ChangeEvent<HTMLInputElement>) => {
-    setLongitude(parseFloat(e.target.value));
-  };
+
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -112,8 +135,8 @@ function App() {
       description: description,
       date: date,
       report: file?.name,
-      lat: latitude,
-      long: longitude,
+      lat: lat,
+      long: lng,
     });
   }
 
@@ -124,6 +147,149 @@ function App() {
   const openInNewTab = (url: any) => {
     window.open(url, "_blank", "noreferrer");
   };
+
+  const onClick = useCallback((info: PickingInfo) => {
+    setLng(Object.values(info)[8][0]);
+    setLat(Object.values(info)[8][1]);
+  }, []);
+
+  let layer82 = new MVTLayer({
+    id: "lateral",
+    data: `https://a.tiles.mapbox.com/v4/hazensawyer.0t8hy4di/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiaGF6ZW5zYXd5ZXIiLCJhIjoiY2xmNGQ3MDgyMTE3YjQzcnE1djRpOGVtNiJ9.U06GItbSVWFTsvfg9WwQWQ`,
+
+    minZoom: 0,
+    maxZoom: 23,
+    getLineColor: [169, 169, 169, 255],
+
+    getFillColor: [140, 170, 180],
+    getLineWidth: 1,
+
+    lineWidthMinPixels: 1,
+    pickable: true,
+  });
+
+  layers.push(layer82);
+
+  let layer71 = new MVTLayer({
+    id: "gravity-public-pipe",
+    data: `https://a.tiles.mapbox.com/v4/hazensawyer.04mlahe9/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiaGF6ZW5zYXd5ZXIiLCJhIjoiY2xmNGQ3MDgyMTE3YjQzcnE1djRpOGVtNiJ9.U06GItbSVWFTsvfg9WwQWQ`,
+
+    minZoom: 0,
+    maxZoom: 23,
+    getLineColor: [0, 163, 108, 255],
+    getFillColor: [140, 170, 180],
+    getLineWidth: (f) =>
+      f.properties.DIAMETER < 7
+        ? 1
+        : f.properties.DIAMETER < 11
+        ? 3
+        : f.properties.DIAMETER < 17
+        ? 5
+        : f.properties.DIAMETER < 25
+        ? 7
+        : f.properties.DIAMETER < 31
+        ? 9
+        : 11,
+
+    lineWidthMinPixels: 1,
+    pickable: true,
+  });
+
+  layers.push(layer71);
+
+  let layer101 = new MVTLayer({
+    id: "gravity-private-pipe",
+    data: `https://a.tiles.mapbox.com/v4/hazensawyer.dhp8w8ur/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiaGF6ZW5zYXd5ZXIiLCJhIjoiY2xmNGQ3MDgyMTE3YjQzcnE1djRpOGVtNiJ9.U06GItbSVWFTsvfg9WwQWQ`,
+
+    minZoom: 0,
+    maxZoom: 23,
+    getLineColor: [0, 163, 108, 255],
+    getFillColor: [140, 170, 180],
+    getLineWidth: (f) =>
+      f.properties.DIAMETER < 7
+        ? 1
+        : f.properties.DIAMETER < 11
+        ? 3
+        : f.properties.DIAMETER < 17
+        ? 5
+        : f.properties.DIAMETER < 25
+        ? 7
+        : f.properties.DIAMETER < 31
+        ? 9
+        : 11,
+
+    lineWidthMinPixels: 1,
+    pickable: true,
+  });
+
+  layers.push(layer101);
+
+  let layer81 = new MVTLayer({
+    id: "fmpipe",
+    data: `https://a.tiles.mapbox.com/v4/hazensawyer.4hfx5po8/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiaGF6ZW5zYXd5ZXIiLCJhIjoiY2xmNGQ3MDgyMTE3YjQzcnE1djRpOGVtNiJ9.U06GItbSVWFTsvfg9WwQWQ`,
+
+    minZoom: 0,
+    maxZoom: 23,
+    getLineColor: (f) =>
+      f.properties.DIAMETER < 10
+        ? [128, 0, 32, 255]
+        : f.properties.DIAMETER < 20
+        ? [233, 116, 81, 255]
+        : [255, 195, 0, 255],
+    getFillColor: [140, 170, 180],
+    getLineWidth: (f) =>
+      f.properties.DIAMETER < 7
+        ? 1
+        : f.properties.DIAMETER < 11
+        ? 3
+        : f.properties.DIAMETER < 17
+        ? 4
+        : f.properties.DIAMETER < 25
+        ? 5
+        : f.properties.DIAMETER < 31
+        ? 6
+        : 7,
+
+    lineWidthMinPixels: 1,
+    pickable: true,
+  });
+
+  layers.push(layer81);
+
+  let layer75 = new MVTLayer({
+    id: "mh",
+    data: `https://a.tiles.mapbox.com/v4/hazensawyer.56zc2nx5/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiaGF6ZW5zYXd5ZXIiLCJhIjoiY2xmNGQ3MDgyMTE3YjQzcnE1djRpOGVtNiJ9.U06GItbSVWFTsvfg9WwQWQ`,
+    minZoom: 15,
+    maxZoom: 23,
+    filled: true,
+    getIconAngle: 0,
+    getIconColor: [0, 0, 0, 255],
+    getIconPixelOffset: [-2, 2],
+    getIconSize: 3,
+    // getText: (f) => f.properties.FACILITYID,
+    getPointRadius: 2,
+    getTextAlignmentBaseline: "center",
+    getTextAnchor: "middle",
+    getTextAngle: 0,
+    getTextBackgroundColor: [0, 0, 0, 255],
+    getTextBorderColor: [0, 0, 0, 255],
+    getTextBorderWidth: 0,
+    getTextColor: [0, 0, 0, 255],
+    getTextPixelOffset: [-12, -12],
+    getTextSize: 20,
+    pointRadiusMinPixels: 2,
+
+    // getPointRadius: (f) => (f.properties.PRESSURE < 45 ? 6 : 3),
+    getFillColor: [255, 195, 0, 255],
+    // Interactive props
+    pickable: true,
+    autoHighlight: true,
+    // ...choice,
+    // pointRadiusUnits: "pixels",
+    pointType: "circle+text",
+  });
+
+  layers.push(layer75);
 
   return (
     <main>
@@ -164,7 +330,6 @@ function App() {
           width="150%"
         />
 
-       
         <input
           type="date"
           value={date}
@@ -174,18 +339,18 @@ function App() {
         />
         <input
           type="number"
-          value={latitude}
-          onChange={handleLatitude}
+          value={lat}
+        
           width="150%"
         />
         <input
           type="number"
-          value={longitude}
-          onChange={handleLongitude}
+          value={lng}
+         
           width="150%"
         />
-         <input type="file" onChange={handleChange} />
-         <Button onClick={handleClick}>Upload</Button>
+        <input type="file" onChange={handleChange} />
+        <Button onClick={handleClick}>Upload</Button>
       </Flex>
       <View
         as="div"
@@ -226,6 +391,36 @@ function App() {
             </TableBody>
           </Table>
         </ThemeProvider>
+      </View>
+      <View>
+        <DeckGL
+          initialViewState={INITIAL_VIEW_STATE}
+          controller
+          layers={layers}
+          onClick={onClick}
+          onViewStateChange={({ viewState }) => setViewport(viewState)}
+          style={{
+            height: "50%",
+            width: "100%",
+            top: "50%",
+          }}
+        >
+          <MapView
+            {...viewport}
+            initialViewState={INITIAL_VIEW_STATE}
+            style={{
+              //position: "absolute",
+              zIndex: -1,
+              height: "100%",
+              width: "100%",
+            }}
+          >
+              <Marker latitude={lat} longitude={lng} />
+                <NavigationControl />
+                <GeolocateControl />
+                <ScaleControl />
+          </MapView>
+        </DeckGL>
       </View>
     </main>
   );
