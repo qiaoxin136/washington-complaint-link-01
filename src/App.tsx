@@ -388,6 +388,11 @@ function App() {
         </Button>
       </Flex>
       <br />
+      <Flex
+        direction="column"
+      >
+
+      
       <Flex direction="row">
         <input
           type="text"
@@ -490,6 +495,7 @@ function App() {
           </MapView>
         </DeckGL>
       </ScrollView>
+      </Flex>
     </main>
   );
 }
