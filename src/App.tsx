@@ -21,6 +21,7 @@ import {
   Theme,
   Divider,
   ScrollView,
+  Tabs,
 } from "@aws-amplify/ui-react";
 
 import {
@@ -107,6 +108,7 @@ function App() {
   const [viewport, setViewport] = useState(INITIAL_VIEW_STATE);
 
   const [data, setData] = useState<DataType>();
+  const [tab, setTab] = useState("1");
   const layers: any = [];
 
   const handleChange = (event: any) => {
@@ -388,113 +390,136 @@ function App() {
         </Button>
       </Flex>
       <br />
-      <Flex
-        direction="column"
-      >
+      <Flex direction="column">
+        <Flex direction="row">
+          <input
+            type="text"
+            value={person}
+            placeholder="person"
+            onChange={handlePerson}
+            width="250%"
+          />
+          <input
+            type="text"
+            value={description}
+            placeholder="description"
+            onChange={handleDescription}
+            width="150%"
+          />
 
-      
-      <Flex direction="row">
-        <input
-          type="text"
-          value={person}
-          placeholder="person"
-          onChange={handlePerson}
-          width="250%"
+          <input
+            type="date"
+            value={date}
+            placeholder="date"
+            onChange={handleDate}
+            width="150%"
+          />
+          <input type="number" value={lat} width="150%" />
+          <input type="number" value={lng} width="150%" />
+          <input type="file" onChange={handleChange} />
+          <Button onClick={handleClick}>Upload</Button>
+        </Flex>
+        <Tabs
+          value={tab}
+          onValueChange={(tab) => setTab(tab)}
+          items={[
+            {
+              label: "Complaint Data",
+              value: "1",
+              content: (
+                <>
+                  <ScrollView
+                    as="div"
+                    ariaLabel="View example"
+                    backgroundColor="var(--amplify-colors-white)"
+                    borderRadius="6px"
+                    //border="1px solid var(--amplify-colors-black)"
+                    // boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)"
+                    color="var(--amplify-colors-blue-60)"
+                    // height="45rem"
+                    // maxWidth="100%"
+                    padding="1rem"
+                    // width="100%"
+                    width="2400px"
+                    height={"2400px"}
+                    maxHeight={"2400px"}
+                    maxWidth="2400px"
+                  >
+                    <ThemeProvider theme={theme} colorMode="light">
+                      <Table caption="" highlightOnHover={false}>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell as="th">Name</TableCell>
+                            <TableCell as="th">Description</TableCell>
+                            <TableCell as="th">Date</TableCell>
+                            <TableCell as="th">Report</TableCell>
+                            <TableCell as="th">Latitude</TableCell>
+                            <TableCell as="th">Longitude</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {todos.map((todo) => (
+                            <TableRow
+                              onClick={() => deleteTodo(todo.id)}
+                              key={todo.id}
+                            >
+                              <TableCell>{todo.person}</TableCell>
+                              <TableCell>{todo.description}</TableCell>
+                              <TableCell>{todo.date}</TableCell>
+                              <TableCell>{todo.report}</TableCell>
+                              <TableCell>{todo.lat}</TableCell>
+                              <TableCell>{todo.long}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </ThemeProvider>
+                  </ScrollView>
+                </>
+              ),
+            },
+            {
+              label: "Complaint Map",
+              value: "2",
+              content: (
+                <>
+                  <ScrollView>
+                    <DeckGL
+                      initialViewState={INITIAL_VIEW_STATE}
+                      controller
+                      layers={layers}
+                      onClick={onClick}
+                      onViewStateChange={({ viewState }) =>
+                        setViewport(viewState)
+                      }
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        top: "30%",
+                      }}
+                    >
+                      <MapView
+                        {...viewport}
+                        initialViewState={INITIAL_VIEW_STATE}
+                        style={{
+                          //position: "absolute",
+                          zIndex: -1,
+                          height: "100%",
+                          width: "100%",
+                        }}
+                      >
+                        <Marker latitude={lat} longitude={lng} />
+                        <NavigationControl />
+                        <GeolocateControl />
+                        <ScaleControl />
+                      </MapView>
+                    </DeckGL>
+                  </ScrollView>
+                </>
+              ),
+            },
+          ]}
         />
-        <input
-          type="text"
-          value={description}
-          placeholder="description"
-          onChange={handleDescription}
-          width="150%"
-        />
-
-        <input
-          type="date"
-          value={date}
-          placeholder="date"
-          onChange={handleDate}
-          width="150%"
-        />
-        <input type="number" value={lat} width="150%" />
-        <input type="number" value={lng} width="150%" />
-        <input type="file" onChange={handleChange} />
-        <Button onClick={handleClick}>Upload</Button>
-      </Flex>
-      <ScrollView
-        as="div"
-        ariaLabel="View example"
-        backgroundColor="var(--amplify-colors-white)"
-        borderRadius="6px"
-        //border="1px solid var(--amplify-colors-black)"
-        // boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)"
-        color="var(--amplify-colors-blue-60)"
-        // height="45rem"
-        // maxWidth="100%"
-        padding="1rem"
-        // width="100%"
-        width="2400px"
-        height={"2400px"}
-        maxHeight={"2400px"}
-        maxWidth="2400px"
-      >
-        <ThemeProvider theme={theme} colorMode="light">
-          <Table caption="" highlightOnHover={false}>
-            <TableHead>
-              <TableRow>
-                <TableCell as="th">Name</TableCell>
-                <TableCell as="th">Description</TableCell>
-                <TableCell as="th">Date</TableCell>
-                <TableCell as="th">Report</TableCell>
-                <TableCell as="th">Latitude</TableCell>
-                <TableCell as="th">Longitude</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {todos.map((todo) => (
-                <TableRow onClick={() => deleteTodo(todo.id)} key={todo.id}>
-                  <TableCell>{todo.person}</TableCell>
-                  <TableCell>{todo.description}</TableCell>
-                  <TableCell>{todo.date}</TableCell>
-                  <TableCell>{todo.report}</TableCell>
-                  <TableCell>{todo.lat}</TableCell>
-                  <TableCell>{todo.long}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </ThemeProvider>
-      </ScrollView>
-      <ScrollView>
-        <DeckGL
-          initialViewState={INITIAL_VIEW_STATE}
-          controller
-          layers={layers}
-          onClick={onClick}
-          onViewStateChange={({ viewState }) => setViewport(viewState)}
-          style={{
-            height: "100%",
-            width: "100%",
-            top: "90%",
-          }}
-        >
-          <MapView
-            {...viewport}
-            initialViewState={INITIAL_VIEW_STATE}
-            style={{
-              //position: "absolute",
-              zIndex: -1,
-              height: "100%",
-              width: "100%",
-            }}
-          >
-            <Marker latitude={lat} longitude={lng} />
-            <NavigationControl />
-            <GeolocateControl />
-            <ScaleControl />
-          </MapView>
-        </DeckGL>
-      </ScrollView>
       </Flex>
     </main>
   );
