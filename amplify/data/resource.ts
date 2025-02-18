@@ -16,7 +16,7 @@ const schema = a.schema({
       date: a.date(), 
       lat: a.float(),
       long: a.float(),
-      
+      status: a.boolean(),
     })
     .authorization((allow) => [allow.publicApiKey()]),
 });
