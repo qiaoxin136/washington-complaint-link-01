@@ -495,7 +495,7 @@ function App() {
                       style={{
                         height: "100%",
                         width: "100%",
-                        top: "30%",
+                        top: "40%",
                       }}
                     >
                       <MapView
