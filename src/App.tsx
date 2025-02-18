@@ -4,7 +4,7 @@ import { DeckGL } from "@deck.gl/react";
 import { PickingInfo } from "@deck.gl/core";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
-import { useAuthenticator } from "@aws-amplify/ui-react";
+import { Input, useAuthenticator } from "@aws-amplify/ui-react";
 import { MapView } from "@aws-amplify/ui-react-geo";
 import { generateClient } from "aws-amplify/data";
 import "@aws-amplify/ui-react/styles.css";
@@ -22,6 +22,8 @@ import {
   Divider,
   ScrollView,
   Tabs,
+  ToggleButton,
+ // TextField, 
 } from "@aws-amplify/ui-react";
 
 import {
@@ -102,6 +104,7 @@ function App() {
   //const [report, setReport] = useState("");
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
+  const [resolved, setResolved] = useState(false);
 
   const [file, setFile] = useState<FileType>();
 
@@ -181,7 +184,14 @@ function App() {
       report: file?.name,
       lat: lat,
       long: lng,
+      status: resolved,
     });
+    setPerson("");
+    setDescription("");
+    setDate("");
+    setLat(0);
+    setLng(0);
+    setResolved(false);
   }
 
   function deleteTodo(id: string) {
@@ -414,10 +424,16 @@ function App() {
             onChange={handleDate}
             width="150%"
           />
-          <input type="number" value={lat} width="150%" />
-          <input type="number" value={lng} width="150%" />
+          <Input type="number" value={lat} width="150%" />
+          <Input type="number" value={lng} width="150%" />
           <input type="file" onChange={handleChange} />
           <Button onClick={handleClick}>Upload</Button>
+          <ToggleButton
+            isPressed={resolved}
+            onChange={() => setResolved(!resolved)}
+          >
+            Resolve (click)
+          </ToggleButton>
         </Flex>
         <Tabs
           value={tab}
@@ -455,6 +471,7 @@ function App() {
                             <TableCell as="th">Report</TableCell>
                             <TableCell as="th">Latitude</TableCell>
                             <TableCell as="th">Longitude</TableCell>
+                            <TableCell as="th">Resolved</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -469,6 +486,7 @@ function App() {
                               <TableCell>{todo.report}</TableCell>
                               <TableCell>{todo.lat}</TableCell>
                               <TableCell>{todo.long}</TableCell>
+                              <TableCell>{todo.status}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
