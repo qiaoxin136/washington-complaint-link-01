@@ -366,7 +366,7 @@ function App() {
       },
     },
     getIcon: () => "marker",
-    getIconSize: (f:any)=>f.properties.status ===true? 5:2,
+    getIconSize: (f:any)=>f.properties.status ==="true"? 2:5,
     getIconColor: [112, 128, 144, 200],
     getIconAngle: 0,
     iconSizeUnits: "meters",
