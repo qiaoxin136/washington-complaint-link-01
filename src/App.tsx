@@ -519,7 +519,7 @@ function App() {
                     >
                       <MapView
                         {...viewport}
-                        initialViewState={INITIAL_VIEW_STATE}
+                        // initialViewState={INITIAL_VIEW_STATE}
                         style={{
                           //position: "absolute",
                           zIndex: -1,
