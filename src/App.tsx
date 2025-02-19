@@ -46,6 +46,7 @@ type BlockProperties = {
   description: string;
   date: string;
   report: string;
+  status: string;
 };
 
 export type DataType = Feature<Geometry, BlockProperties>;
@@ -198,9 +199,9 @@ function App() {
     client.models.Todo.delete({ id });
   }
 
-  // const openInNewTab = (url: any) => {
-  //   window.open(url, "_blank", "noreferrer");
-  // };
+  const openInNewTab = (url: any) => {
+    window.open(url, "_blank", "noreferrer");
+  };
 
   const onClick = useCallback((info: PickingInfo) => {
     setLng(Object.values(info)[8][0]);
@@ -391,12 +392,12 @@ function App() {
         </Button>
         <Button
           role="link"
-          // onClick={() =>
-          //   openInNewTab("https://showdata.d34q2tdncqr0gx.amplifyapp.com/")
-          // }
-          onClick={() => getPlacesData()}
+          onClick={() =>
+            openInNewTab("https://washington-2-map-fixed.d2qs7f7sc8f3m1.amplifyapp.com")
+          }
+          //onClick={() => getPlacesData()}
         >
-          Refresh Data
+          Map
         </Button>
       </Flex>
       <br />
