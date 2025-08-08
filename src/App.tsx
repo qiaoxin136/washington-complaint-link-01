@@ -23,7 +23,7 @@ import {
   ScrollView,
   Tabs,
   ToggleButton,
- // TextField, 
+  // TextField, 
 } from "@aws-amplify/ui-react";
 
 import {
@@ -237,14 +237,14 @@ function App() {
       f.properties.DIAMETER < 7
         ? 1
         : f.properties.DIAMETER < 11
-        ? 3
-        : f.properties.DIAMETER < 17
-        ? 5
-        : f.properties.DIAMETER < 25
-        ? 7
-        : f.properties.DIAMETER < 31
-        ? 9
-        : 11,
+          ? 3
+          : f.properties.DIAMETER < 17
+            ? 5
+            : f.properties.DIAMETER < 25
+              ? 7
+              : f.properties.DIAMETER < 31
+                ? 9
+                : 11,
 
     lineWidthMinPixels: 1,
     pickable: true,
@@ -264,14 +264,14 @@ function App() {
       f.properties.DIAMETER < 7
         ? 1
         : f.properties.DIAMETER < 11
-        ? 3
-        : f.properties.DIAMETER < 17
-        ? 5
-        : f.properties.DIAMETER < 25
-        ? 7
-        : f.properties.DIAMETER < 31
-        ? 9
-        : 11,
+          ? 3
+          : f.properties.DIAMETER < 17
+            ? 5
+            : f.properties.DIAMETER < 25
+              ? 7
+              : f.properties.DIAMETER < 31
+                ? 9
+                : 11,
 
     lineWidthMinPixels: 1,
     pickable: true,
@@ -289,21 +289,21 @@ function App() {
       f.properties.DIAMETER < 10
         ? [128, 0, 32, 255]
         : f.properties.DIAMETER < 20
-        ? [233, 116, 81, 255]
-        : [255, 195, 0, 255],
+          ? [233, 116, 81, 255]
+          : [255, 195, 0, 255],
     getFillColor: [140, 170, 180],
     getLineWidth: (f) =>
       f.properties.DIAMETER < 7
         ? 1
         : f.properties.DIAMETER < 11
-        ? 3
-        : f.properties.DIAMETER < 17
-        ? 4
-        : f.properties.DIAMETER < 25
-        ? 5
-        : f.properties.DIAMETER < 31
-        ? 6
-        : 7,
+          ? 3
+          : f.properties.DIAMETER < 17
+            ? 4
+            : f.properties.DIAMETER < 25
+              ? 5
+              : f.properties.DIAMETER < 31
+                ? 6
+                : 7,
 
     lineWidthMinPixels: 1,
     pickable: true,
@@ -367,7 +367,7 @@ function App() {
       },
     },
     getIcon: () => "marker",
-    getIconSize: (f:any)=>f.properties.status ==="true"? 2:5,
+    getIconSize: (f: any) => f.properties.status === "true" ? 2 : 5,
     getIconColor: [112, 128, 144, 200],
     getIconAngle: 0,
     iconSizeUnits: "meters",
@@ -395,7 +395,7 @@ function App() {
           onClick={() =>
             openInNewTab("https://washington-2-map-fixed.d2qs7f7sc8f3m1.amplifyapp.com")
           }
-          //onClick={() => getPlacesData()}
+        //onClick={() => getPlacesData()}
         >
           Map
         </Button>
@@ -440,9 +440,50 @@ function App() {
           value={tab}
           onValueChange={(tab) => setTab(tab)}
           items={[
+
+            {
+              label: "Complaint Map",
+              value: "1",
+              content: (
+                <>
+                  <ScrollView>
+                    <DeckGL
+                      initialViewState={INITIAL_VIEW_STATE}
+                      controller
+                      layers={layers}
+                      onClick={onClick}
+                      onViewStateChange={({ viewState }) =>
+                        setViewport(viewState)
+                      }
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        top: "40%",
+                      }}
+                    >
+                      <MapView
+                        {...viewport}
+                        // initialViewState={INITIAL_VIEW_STATE}
+                        style={{
+                          //position: "absolute",
+                          zIndex: -1,
+                          height: "100%",
+                          width: "100%",
+                        }}
+                      >
+                        <Marker latitude={lat} longitude={lng} />
+                        <NavigationControl />
+                        <GeolocateControl />
+                        <ScaleControl />
+                      </MapView>
+                    </DeckGL>
+                  </ScrollView>
+                </>
+              ),
+            },
             {
               label: "Complaint Data",
-              value: "1",
+              value: "2",
               content: (
                 <>
                   <ScrollView
@@ -493,46 +534,6 @@ function App() {
                         </TableBody>
                       </Table>
                     </ThemeProvider>
-                  </ScrollView>
-                </>
-              ),
-            },
-            {
-              label: "Complaint Map",
-              value: "2",
-              content: (
-                <>
-                  <ScrollView>
-                    <DeckGL
-                      initialViewState={INITIAL_VIEW_STATE}
-                      controller
-                      layers={layers}
-                      onClick={onClick}
-                      onViewStateChange={({ viewState }) =>
-                        setViewport(viewState)
-                      }
-                      style={{
-                        height: "100%",
-                        width: "100%",
-                        top: "40%",
-                      }}
-                    >
-                      <MapView
-                        {...viewport}
-                        // initialViewState={INITIAL_VIEW_STATE}
-                        style={{
-                          //position: "absolute",
-                          zIndex: -1,
-                          height: "100%",
-                          width: "100%",
-                        }}
-                      >
-                        <Marker latitude={lat} longitude={lng} />
-                        <NavigationControl />
-                        <GeolocateControl />
-                        <ScaleControl />
-                      </MapView>
-                    </DeckGL>
                   </ScrollView>
                 </>
               ),
