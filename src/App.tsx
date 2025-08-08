@@ -393,7 +393,7 @@ function App() {
         <Button
           role="link"
           onClick={() =>
-            openInNewTab("https://washington-2-map-fixed.d2qs7f7sc8f3m1.amplifyapp.com")
+            openInNewTab("https://2-pane.d3jmmv4s0umh4t.amplifyapp.com/")
           }
         //onClick={() => getPlacesData()}
         >
