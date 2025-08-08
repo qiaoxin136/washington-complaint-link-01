@@ -18,7 +18,7 @@ const components = {
       <View textAlign="center" padding={tokens.space.large}>
         <Image
           alt="City of Hollywood Public Utility"
-          src="https://mylibraryforuse.s3.us-east-1.amazonaws.com/logo/Hollywood-logo.png"
+          src="https://hollywood-files.s3.us-east-1.amazonaws.com/Logo/hollywood-logo.jpg"
         />
       </View>
     );
