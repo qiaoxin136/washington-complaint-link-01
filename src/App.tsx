@@ -349,30 +349,28 @@ function App() {
   let layer25 = new GeoJsonLayer({
     id: "datasource",
     data: data,
-    filled: true,
-    //pointType: "circle+text",
-    pickable: true,
     pointType: "icon",
-    iconAtlas:
-      "https://mylibraryforuse.s3.amazonaws.com/logo/icons8-marker-100.png",
-    iconMapping: {
-      marker: {
-        x: 0,
-        y: 0,
-        width: 100,
-        height: 100,
-        anchorY: 50,
-        anchorX: 50,
-        mask: false,
-      },
-    },
-    getIcon: () => "marker",
-    getIconSize: (f: any) => f.properties.status === "true" ? 2 : 5,
-    getIconColor: [112, 128, 144, 200],
-    getIconAngle: 0,
-    iconSizeUnits: "meters",
-    iconSizeScale: 5,
-    iconSizeMinPixels: 6,
+      iconAtlas:
+        "https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png",
+      iconMapping:
+        "https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.json",
+      getIcon: () => "marker",
+      getIconSize: 8,
+      getIconColor: (d: any) =>
+        d.properties.status === "true"
+          ? [80, 200, 120, 255]
+          : [220, 20, 60, 255],
+      getIconAngle: 0,
+      iconSizeUnits: "meters",
+      iconSizeScale: 3,
+      iconSizeMinPixels: 6,
+      pointRadiusMinPixels: 2,
+      pointRadiusScale: 9,
+      // getPointRadius: (f) => 11 - f.properties.scalerank,
+      //getFillColor: (d:any)=>(d.properties.status==="true" ?[220, 20, 60, 255]:[34, 35,25,255]),
+      // Interactive props
+      pickable: true,
+      autoHighlight: true,
   });
 
   layers.push(layer25);

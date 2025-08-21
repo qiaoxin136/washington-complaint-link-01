@@ -6,7 +6,7 @@ import { Amplify } from "aws-amplify";
 import outputs from "../amplify_outputs.json";
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-import { useTheme, Image, View, Text, Heading, Button, useAuthenticator } from "@aws-amplify/ui-react";
+import { useTheme,  View, Text, Heading, Button, useAuthenticator } from "@aws-amplify/ui-react";
 
 Amplify.configure(outputs);
 
@@ -16,10 +16,7 @@ const components = {
 
     return (
       <View textAlign="center" padding={tokens.space.large}>
-        <Image
-          alt="City of Hollywood Public Utility"
-          src="https://hollywood-files.s3.us-east-1.amazonaws.com/Logo/hollywood-logo.jpg"
-        />
+  
       </View>
     );
   },
